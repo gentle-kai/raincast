@@ -1,0 +1,25 @@
+name: checks
+
+on: [push, pull_request]
+
+jobs:
+  cpu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: python -m pip install numpy
+
+      - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - run: python -m unittest discover -s tests -v
+
+      - run: python scripts/make_synthetic_cache.py --output-dir examples/cache
+
+      - run: python scripts/train_tp_radar_multitask.py --surface-cache examples/cache/surface --tp-cache examples/cache/tp --radar-cache examples/cache/radar --output-dir outputs/demo --epochs 1 --batch-size 2 --num-workers 0 --patch-size 32
+
+      - run: python scripts/predict_synthetic.py --checkpoint outputs/demo/best.pt
