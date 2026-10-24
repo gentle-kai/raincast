@@ -1,5 +1,7 @@
 # 对齐缓存接口
 
+**简体中文** | [English](DATA_FORMAT.en.md) · [README](../README.md)
+
 训练命令需要三棵缓存目录，每棵下面有 `train/` 和 `offline_valid/`。同一样本三份 NPZ 的文件名必须相同，例如 `process001_000.npz`。读取器按名称匹配，只保留完整配对；真实数据接入时应先单独检查预期样本数及缺失情况，不能把配对成功当作全量覆盖。
 
 | 缓存 | key | shape | 单位 / 含义 |
